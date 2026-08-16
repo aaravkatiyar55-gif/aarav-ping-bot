@@ -1,0 +1,22 @@
+{
+  "name": "aarav-ping-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A beginner-friendly Slack Bolt Socket Mode ping bot.",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "start:local": "node --env-file=.env src/app.js",
+    "dev": "node --watch --env-file=.env src/app.js",
+    "doctor": "node scripts/doctor.js",
+    "check": "node --check src/app.js && node --check src/config.js && node --check src/handlers.js && node --check src/health.js && node --check scripts/doctor.js && node --check test/config.test.js && node --check test/handlers.test.js && node --check test/health.test.js",
+    "test": "node --test",
+    "verify": "npm run doctor && npm run check && npm test"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "dependencies": {
+    "@slack/bolt": "4.2.1"
+  }
+}
