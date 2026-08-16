@@ -1,6 +1,6 @@
 const { readConfig } = require("./config");
 const { close, createHealthServer, listen } = require("./health");
-const { handleAppMention, handlePingCommand } = require("./handlers");
+const { registerBotHandlers } = require("./register");
 
 async function main() {
   const config = readConfig();
@@ -15,8 +15,7 @@ async function main() {
     logLevel: LogLevel.INFO,
   });
 
-  app.command("/aarav-ping", handlePingCommand);
-  app.event("app_mention", handleAppMention);
+  registerBotHandlers(app);
 
   const healthServer = config.port
     ? createHealthServer({ isReady: () => ready })

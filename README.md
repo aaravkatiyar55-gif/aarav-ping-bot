@@ -3,8 +3,11 @@
 Yeh beginner-friendly Node.js Slack Bolt bot Socket Mode use karta hai.
 
 - `/aarav-ping` ka reply: `Pong`
+- `/aarav-help` bot ke available functions dikhata hai
 - `@Aarav Ping Bot` mention ka threaded reply: `Pong 👋`
 - Koi fake logged hours, rewards, tracking, database, ya user-data storage nahi hai.
+
+Mission ke liye teen distinct functions hain: ping command, help command, aur mention reply. Dono slash commands `aarav-` prefix use karte hain, isliye generic `/ping` ya `/help` names se collision nahi hota.
 
 ## Project structure
 
@@ -15,12 +18,15 @@ aarav-ping-bot/
 │   ├── app.js          # Slack connection, startup aur graceful shutdown
 │   ├── config.js       # Environment validation
 │   ├── handlers.js     # Command aur mention logic
-│   └── health.js       # Optional GET /healthz endpoint
+│   ├── health.js       # Optional GET /healthz endpoint
+│   └── register.js     # Bolt listeners ko ek jagah register karta hai
 ├── test/               # Node ke built-in offline tests
 ├── .env.example        # Placeholders only
 ├── .gitignore          # Real .env ko ignore karta hai
+├── .wakatime-project   # Hackatime activity ko isi repo name se isolate karta hai
 ├── package-lock.json   # Reproducible dependency versions
-└── package.json
+├── package.json
+└── slack-app-manifest.json # Reviewable Slack app configuration
 ```
 
 ## Requirements
@@ -103,7 +109,7 @@ Project ne koi external Slack setting change nahi ki. Owner dashboard mein sirf 
 
 1. Socket Mode enabled hai.
 2. Event Subscriptions mein bot event `app_mention` subscribed hai.
-3. Slash Commands mein exact `/aarav-ping` command configured hai.
+3. Slash Commands mein exact `/aarav-ping` aur `/aarav-help` commands configured hain.
 4. Bot Hack Club workspace aur test channel mein available/invited hai.
 5. Bot scopes exactly `chat:write`, `commands`, `app_mentions:read`, `channels:history` hain.
 
@@ -118,8 +124,9 @@ npm run start:local
 `Aarav Ping Bot Socket Mode mein ready hai` log aane ke baad:
 
 1. Slack mein `/aarav-ping` run karo → expected `Pong`.
-2. Test channel mein `@Aarav Ping Bot hello` bhejo → expected threaded `Pong 👋`.
-3. Terminal mein `Ctrl+C` dabao → safe shutdown logs expected hain.
+2. Slack mein `/aarav-help` run karo → expected function list.
+3. Test channel mein `@Aarav Ping Bot hello` bhejo → expected threaded `Pong 👋`.
+4. Terminal mein `Ctrl+C` dabao → safe shutdown logs expected hain.
 
 Yeh live test tokens aur Hack Club Slack access use karta hai, isliye owner-only hai. Is repository preparation mein yeh test run nahi hua.
 
@@ -138,6 +145,8 @@ Koi provider select ya configure nahi kiya gaya. Owner jo host choose kare, usme
 9. **Always-on policy:** host sleep/idle suspend karta ho to Socket Mode disconnect ho sakta hai; hosting limits pehle verify karo.
 
 Host par `.env` file usually nahi banani chahiye. `npm start` already host-injected environment variables read karta hai. Local machine ke liye hi `npm run start:local` use karo.
+
+Hackatime `.wakatime-project` ko project detection mein highest priority deta hai, isliye is repo ki new coding activity `aarav-ping-bot` naam se alag record honi chahiye. Stardance mein koi aur Hackatime project link mat karo.
 
 ### Owner deployment sequence
 
@@ -176,3 +185,11 @@ Host par `.env` file usually nahi banani chahiye. `npm start` already host-injec
 - Bot incoming text ko execute/evaluate nahi karta aur messages persist nahi karta.
 - Token leak ka doubt ho to owner Slack dashboard se token rotate/revoke kare. Git se file delete karna token ko safe nahi banata.
 - Deployment, Slack setting changes, token entry, live Slack testing, repository push, aur Stardance submission owner-only actions hain.
+
+## Official references
+
+- [Slack Bolt slash commands](https://docs.slack.dev/tools/bolt-js/concepts/commands/): command listener ko jaldi `ack()` karke `respond()` use karna chahiye.
+- [Slack Bolt events](https://docs.slack.dev/tools/bolt-js/concepts/event-listening/): `app.event("app_mention", ...)` subscribed event receive karta hai.
+- [Slack Bolt Socket Mode](https://docs.slack.dev/tools/bolt-js/concepts/socket-mode): `socketMode: true` aur app-level token public request URL ke bina WebSocket connection banate hain.
+- [Slack app manifest reference](https://docs.slack.dev/reference/app-manifest/): repository ka `slack-app-manifest.json` commands, scopes, events, aur Socket Mode configuration document karta hai.
+- [WakaTime CLI project detection](https://github.com/wakatime/wakatime-cli/blob/develop/USAGE.md#project-detection): `.wakatime-project` detected Git/IDE project name ko override karta hai.

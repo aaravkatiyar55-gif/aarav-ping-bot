@@ -1,5 +1,11 @@
 const PONG_MESSAGE = "Pong";
 const MENTION_MESSAGE = "Pong 👋";
+const HELP_MESSAGE = [
+  "Aarav Ping Bot functions:",
+  "• /aarav-ping — bot ka Pong check",
+  "• /aarav-help — yeh function list",
+  "• @Aarav Ping Bot mention — thread mein reply",
+].join("\n");
 
 async function handlePingCommand({ ack, respond, logger }) {
   await ack();
@@ -8,6 +14,16 @@ async function handlePingCommand({ ack, respond, logger }) {
     await respond(PONG_MESSAGE);
   } catch (error) {
     logger.error(`/aarav-ping ka response send nahi hua: ${error.message}`);
+  }
+}
+
+async function handleHelpCommand({ ack, respond, logger }) {
+  await ack();
+
+  try {
+    await respond(HELP_MESSAGE);
+  } catch (error) {
+    logger.error(`/aarav-help ka response send nahi hua: ${error.message}`);
   }
 }
 
@@ -23,8 +39,10 @@ async function handleAppMention({ event, say, logger }) {
 }
 
 module.exports = {
+  HELP_MESSAGE,
   MENTION_MESSAGE,
   PONG_MESSAGE,
   handleAppMention,
+  handleHelpCommand,
   handlePingCommand,
 };

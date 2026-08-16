@@ -5,12 +5,15 @@ const projectRoot = path.resolve(__dirname, "..");
 const requiredFiles = [
   ".env.example",
   ".gitignore",
+  ".wakatime-project",
   "package.json",
   "package-lock.json",
   "src/app.js",
   "src/config.js",
   "src/handlers.js",
   "src/health.js",
+  "src/register.js",
+  "slack-app-manifest.json",
 ];
 
 function fail(message) {
@@ -46,6 +49,15 @@ if (
   fail(".env.example mein expected safe placeholders missing hain.");
 } else {
   console.log("PASS: .env.example mein placeholder-only Slack config hai.");
+}
+
+const trackedProjectName = fs
+  .readFileSync(path.join(projectRoot, ".wakatime-project"), "utf8")
+  .trim();
+if (trackedProjectName !== "aarav-ping-bot") {
+  fail(".wakatime-project ko exact aarav-ping-bot project isolate karna chahiye.");
+} else {
+  console.log("PASS: Hackatime project identity aarav-ping-bot par isolated hai.");
 }
 
 const manifest = JSON.parse(fs.readFileSync(path.join(projectRoot, "package.json"), "utf8"));
