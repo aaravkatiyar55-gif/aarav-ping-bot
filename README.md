@@ -64,6 +64,7 @@ sudo systemctl is-active aarav-ping-bot
 ```
 
 Do not start it repeatedly with incomplete credentials. A service manager can otherwise get stuck in a restart loop.
+The unit limits failed starts to five in two minutes. After fixing the cause of a start-limit failure, use `sudo systemctl reset-failed aarav-ping-bot` before starting it again.
 
 The HTTP page at `/` describes the real Slack functions and shows connection status at page load. `/healthz` returns `200 {"status":"ready"}` only while the Slack connection is active; otherwise it returns 503. Both responses avoid caching. The page is an instruction page, not a simulated Slack demo.
 
