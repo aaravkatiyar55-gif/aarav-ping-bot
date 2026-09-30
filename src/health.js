@@ -1,7 +1,20 @@
 const http = require("node:http");
+const fs = require("node:fs");
+const path = require("node:path");
+const demo = fs.readFileSync(path.join(__dirname, "demo.html"), "utf8");
 
 function createHealthServer({ isReady }) {
   return http.createServer((request, response) => {
+    if (request.method === "GET" && request.url === "/") {
+      response.writeHead(200, {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "no-store",
+        "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'; form-action 'none'",
+        "x-content-type-options": "nosniff",
+      });
+      response.end(demo.replace("{{STATUS}}", isReady() ? "connected to Slack" : "not ready yet"));
+      return;
+    }
     if (request.method !== "GET" || request.url !== "/healthz") {
       response.writeHead(404, { "content-type": "application/json" });
       response.end(JSON.stringify({ status: "not_found" }));

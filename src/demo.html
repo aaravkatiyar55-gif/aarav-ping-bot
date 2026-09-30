@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aarav Ping Bot</title>
+<style>
+  :root { color-scheme: light; font: 17px/1.6 system-ui,sans-serif; color: #172d31; background: #faf7ef; }
+  * { box-sizing: border-box; } body { max-width: 780px; margin: auto; padding: 3rem 1.25rem; }
+  header { border-left: 5px solid #23766c; padding-left: 1.2rem; } h1 { font-size: clamp(2rem,7vw,3.5rem); line-height: 1.1; margin: .5rem 0; }
+  .label { font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: #41635b; }
+  ol { padding-left: 1.4rem; } li { margin: 1.25rem 0; } code { background: #e3ede6; padding: .2rem .35rem; border-radius: 3px; }
+  .status { border: 1px solid #87aaa1; padding: 1rem; margin: 2rem 0; } a { color: #165c54; text-underline-offset: .2em; }
+  footer { border-top: 1px solid #c1cfc4; padding-top: 1rem; font-size: .85rem; }
+</style>
+<header><span class="label">A small Slack utility</span><h1>Aarav Ping Bot</h1><p>Three things, without a dashboard full of settings.</p></header>
+<div class="status"><strong>Connection: {{STATUS}}</strong><br>Readiness is checked when this page loads. <a href="/healthz">Check current status</a>.</div>
+<h2>Try it in the Hack Club workspace</h2>
+<ol>
+  <li>Run <code>/aarav-ping</code>. The reply is <strong>Pong</strong>.</li>
+  <li>Run <code>/aarav-help</code> for the short command list.</li>
+  <li>Mention <strong>@Aarav Ping Bot</strong> in a channel where it has been invited. It replies <strong>Pong 👋</strong> in a thread.</li>
+</ol>
+<p>You need access to the Hack Club Slack workspace and its installed app to use the commands. This page describes the bot; it does not simulate a Slack conversation.</p>
+<p><a href="https://github.com/aaravkatiyar55-gif/aarav-ping-bot">Source, setup and tests on GitHub</a></p>
+<footer>The bot does not save messages or execute incoming text. Slack processes the commands and mentions needed to reply. Built with Node.js and Slack Bolt, with AI assistance during development and documentation.</footer>
+</html>

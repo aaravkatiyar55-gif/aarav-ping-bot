@@ -4,21 +4,25 @@ const { registerBotHandlers } = require("./register");
 
 async function main() {
   const config = readConfig();
-  const { App, LogLevel } = require("@slack/bolt");
+  const { App, LogLevel, SocketModeReceiver } = require("@slack/bolt");
   let ready = false;
   let stopping = false;
 
-  const app = new App({
-    token: config.botToken,
+  const receiver = new SocketModeReceiver({
     appToken: config.appToken,
-    socketMode: true,
     logLevel: LogLevel.INFO,
   });
+  const app = new App({ token: config.botToken, receiver, logLevel: LogLevel.INFO });
+
+  receiver.client.on("connected", () => { ready = true; });
+  for (const event of ["connecting", "reconnecting", "disconnecting", "disconnected"]) {
+    receiver.client.on(event, () => { ready = false; });
+  }
 
   registerBotHandlers(app);
 
   const healthServer = config.port
-    ? createHealthServer({ isReady: () => ready })
+    ? createHealthServer({ isReady: () => ready && !stopping && receiver.client.websocket?.isActive() === true })
     : null;
 
   if (healthServer) {

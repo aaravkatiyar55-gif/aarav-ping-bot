@@ -12,6 +12,7 @@ const requiredFiles = [
   "src/config.js",
   "src/handlers.js",
   "src/health.js",
+  "src/demo.html",
   "src/register.js",
   "slack-app-manifest.json",
 ];
